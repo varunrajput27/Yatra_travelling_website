@@ -21,7 +21,7 @@ const categoryRoutes = require("./routes/categoryRoutes");
 // ✅ Allowed origins
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://bossexpertfrontend.vercel.app",
+  "https://yatrafrontend.vercel.app",
 ];
 
 // ✅ CORS middleware (add only ONCE, at top)
