@@ -1,7 +1,11 @@
 // middleware/authMiddleware.js
 const jwt = require("jsonwebtoken");
 
-const JWT_SECRET = "mera_secret_token"; // production me .env se lo
+
+require("dotenv").config(); 
+const JWT_SECRET = process.env.JWT_SECRET;
+
+
 
 const authenticateToken = (req, res, next) => {
   const authHeader = req.headers["authorization"];
