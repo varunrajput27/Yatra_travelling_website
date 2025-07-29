@@ -3,11 +3,7 @@ const express = require("express");
 
 const cors = require("cors");
 const userRoutes = require("./routes/userRoutes");
-const connectDB = require("./db.js");
-connectDB(); // ✅ Actually triggers the DB connection
-
-
-
+const db = require("./db.js");
 
 const auth = require("./routes/auth");
 require("dotenv").config();
