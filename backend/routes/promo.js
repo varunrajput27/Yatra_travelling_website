@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const Promo = require("../models/Promo");
+const Promo = require("../models/promo");
 const auth = require("../middleware/authMiddleware"); // JWT middleware
 const upload = require("../middleware/upload"); // Multer middleware
 const fs = require("fs");
