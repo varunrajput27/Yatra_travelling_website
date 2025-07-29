@@ -8,6 +8,7 @@ connectDB(); // ✅ Actually triggers the DB connection
 
 
 
+
 const auth = require("./routes/auth");
 require("dotenv").config();
 const app = express();
