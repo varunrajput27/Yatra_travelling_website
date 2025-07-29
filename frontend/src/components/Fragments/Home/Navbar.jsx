@@ -86,6 +86,8 @@ const Navbar = () => {
               <li key={url}>
                 <a href
                   ={url}
+                  onClick={() => setMenuOpen(false)}
+
                   className={`navbar__link group relative text-[15px] font-medium leading-tight text-darkColor dark:text-white ${
                     isCurrentPage(url) ? "active" : ""
                   } ${

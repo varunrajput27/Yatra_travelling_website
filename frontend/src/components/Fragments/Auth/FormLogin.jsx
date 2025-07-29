@@ -7,37 +7,44 @@ import axios from "axios";
 const FormLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isFormValid, setIsFormValid] = useState(false);
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
-  const [alert, setAlert] = useState({ show: false, message: "" });
+  const [alert, setAlert] = useState({ show: false, message: "", headerMessage: "", style: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const navigate = useNavigate();
 
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
-  const navigate = useNavigate();
 
-  const handleAlertClose = () => {
-    setAlert({ show: false, message: "" });
-  };
+  useEffect(() => {
+    emailRef.current.focus();
+  }, []);
 
   const validateEmail = (value) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(value);
   };
 
+  const handleAlertClose = () => {
+    setAlert({ show: false, message: "", headerMessage: "", style: "" });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    let hasError = false;
+
     if (!validateEmail(email)) {
       setEmailError("Invalid email format");
-      return;
+      hasError = true;
     }
 
     if (password.trim() === "") {
       setPasswordError("Password must not be empty");
-      return;
+      hasError = true;
     }
+
+    if (hasError) return;
 
     setIsSubmitting(true);
 
@@ -55,7 +62,7 @@ const FormLogin = () => {
 
       setAlert({
         show: true,
-        message: data.message || "Login success!",
+        message: data.message || "Login successful!",
         headerMessage: "Success!",
         style: "text-green-700 bg-green-200 border-green-400 w-96",
       });
@@ -63,32 +70,21 @@ const FormLogin = () => {
       setTimeout(() => {
         setIsSubmitting(false);
         navigate("/");
-      }, 1000);
+      }, 1200);
     } catch (error) {
-      console.error("Login error:", error);
-
       setAlert({
         show: true,
         message: error?.response?.data?.message || "Login failed. Please try again.",
         headerMessage: "Failed!",
-        style: "text-red-700 bg-red-100 border-red-400 w-96",
+        style: "text-red-700 bg-red-200 border-red-400 w-96",
       });
 
       setTimeout(() => {
-        setAlert({ show: false, message: "" });
+        handleAlertClose();
         setIsSubmitting(false);
       }, 3000);
     }
   };
-
-  useEffect(() => {
-    emailRef.current.focus();
-  }, []);
-
-  useEffect(() => {
-    const isValid = email && validateEmail(email) && password;
-    setIsFormValid(isValid);
-  }, [email, password]);
 
   const handleEmailKeyDown = (e) => {
     if (e.key === "Enter") {
@@ -97,22 +93,23 @@ const FormLogin = () => {
   };
 
   const handlePasswordKeyDown = (e) => {
-    if (e.key === "Enter" && isFormValid) {
+    if (e.key === "Enter") {
       handleSubmit(e);
     }
   };
 
   return (
     <form className="flex flex-col pt-3 md:pt-8" onSubmit={handleSubmit}>
-      {alert?.show && (
+      {alert.show && (
         <Alert
           headerMessage={alert.headerMessage}
           message={alert.message}
-          classname={`fixed right-10 ${alert.style} top-20`}
+          classname={`fixed z-50 right-4 top-20 ${alert.style}`}
           onClose={handleAlertClose}
         />
       )}
 
+      {/* Email Field */}
       <div className="flex flex-col pt-4">
         <label htmlFor="email" className="text-lg dark:text-white">Email</label>
         <input
@@ -126,16 +123,17 @@ const FormLogin = () => {
           }}
           onBlur={() => {
             if (email && !validateEmail(email)) {
-              setEmailError("Invalid email");
+              setEmailError("Invalid email format");
             }
           }}
           onKeyDown={handleEmailKeyDown}
-          className="w-full px-3 py-2 mt-1 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
           ref={emailRef}
+          className="w-full px-3 py-2 mt-1 leading-tight text-gray-700 border rounded shadow focus:outline-none focus:shadow-outline"
         />
         {emailError && <span className="text-sm text-red-500">{emailError}</span>}
       </div>
 
+      {/* Password Field */}
       <div className="flex flex-col pt-4">
         <label htmlFor="password" className="text-lg dark:text-white">Password</label>
         <input
@@ -153,17 +151,18 @@ const FormLogin = () => {
             }
           }}
           onKeyDown={handlePasswordKeyDown}
-          className="w-full px-3 py-2 mt-1 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
           ref={passwordRef}
+          className="w-full px-3 py-2 mt-1 leading-tight text-gray-700 border rounded shadow focus:outline-none focus:shadow-outline"
         />
         {passwordError && <span className="text-sm text-red-500">{passwordError}</span>}
       </div>
 
+      {/* Submit Button */}
       <button
         type="submit"
-        disabled={!isFormValid || isSubmitting}
+        disabled={isSubmitting}
         className={`p-2 mt-8 text-lg font-bold text-white rounded bg-[#015AB8] hover:bg-gray-700 transition-all duration-200 ${
-          (!isFormValid || isSubmitting) && "opacity-50 cursor-not-allowed"
+          isSubmitting && "opacity-50 cursor-not-allowed"
         }`}
       >
         {isSubmitting ? "Logging in..." : "Login"}
@@ -173,6 +172,7 @@ const FormLogin = () => {
 };
 
 export default FormLogin;
+
 
 
 
