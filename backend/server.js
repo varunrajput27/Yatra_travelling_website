@@ -1,8 +1,11 @@
 const path = require("path");
 const express = require("express");
-const db=require("./db.js");
+
 const cors = require("cors");
 const userRoutes = require("./routes/userRoutes");
+const connectDB = require("./db.js");
+connectDB(); // ✅ Actually triggers the DB connection
+
 
 
 const auth = require("./routes/auth");
