@@ -22,6 +22,7 @@ const categoryRoutes = require("./routes/categoryRoutes");
 const allowedOrigins = [
   "http://localhost:5173",
   "https://yatrafrontend.vercel.app",
+
 ];
 
 // ✅ CORS middleware (add only ONCE, at top)

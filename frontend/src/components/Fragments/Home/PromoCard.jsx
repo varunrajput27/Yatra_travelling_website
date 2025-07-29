@@ -44,7 +44,7 @@ const PromoCard = () => {
         >
           <div className="relative">
             <img
-              src={`http://localhost:5000${v.imageUrl}`}
+              src={`${import.meta.env.VITE_BACKEND_LINK}${v.imageUrl}`}
               alt={v.promo_code}
               className="w-full h-52 object-cover object-center rounded-t-3xl"
             />
